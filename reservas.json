@@ -1,0 +1,22 @@
+[
+    {
+        "nombre": "pepe",
+        "mesa": "Mesa 5",
+        "fecha": "2025-05-09T20:17"
+    },
+    {
+        "nombre": "Daniel",
+        "mesa": "Mesa 2",
+        "fecha": "2025-04-16T20:18"
+    },
+    {
+        "nombre": "1.Mario",
+        "mesa": "Mesa 1",
+        "fecha": "2025-04-16T14:22"
+    },
+    {
+        "nombre": "2. Zayn",
+        "mesa": "Mesa 5",
+        "fecha": "2025-04-22T14:22"
+    }
+]
