@@ -54,19 +54,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["nombre"], $_POST["emai
     </header>   
 
     <?php if (!empty($mensajesGuardados)): ?>
-        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <div class="contenido">
             <?php foreach (array_reverse($mensajesGuardados) as $mensaje): ?>
-                <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px; background-color: #f9f9f9;">
-                    <p><strong>Nombre:</strong> <?= htmlspecialchars($mensaje["nombre"]) ?></p>
-                    <p><strong>Email:</strong> <?= htmlspecialchars($mensaje["email"]) ?></p>
-                    <p><strong>Teléfono:</strong> <?= htmlspecialchars($mensaje["telefono"]) ?></p>
-                    <p><strong>Mensaje:</strong> <?= htmlspecialchars($mensaje["mensaje"]) ?></p>
-                    <p><strong>Fecha:</strong> <?= htmlspecialchars($mensaje["fecha"]) ?></p>
+                <div class="mensaje">
+                    <p class="parrafo"><strong>Nombre:</strong> <?= htmlspecialchars($mensaje["nombre"]) ?></p>
+                    <p class="parrafo"><strong>Email: </strong> <?= htmlspecialchars($mensaje["email"]) ?></p>
+                    <p class="parrafo"><strong>Teléfono:</strong> <?= htmlspecialchars($mensaje["telefono"]) ?></p>
+                    <p class="parrafo"><strong>Mensaje:</strong> <?= htmlspecialchars($mensaje["mensaje"]) ?></p>
+                    <p class="parrafo"><strong>Fecha:</strong> <?= htmlspecialchars($mensaje["fecha"]) ?></p>
                 </div>
             <?php endforeach; ?>
         </div>
     <?php else: ?>
-        <p style="font-family: Arial, sans-serif; color: #666;">No hay mensajes para mostrar.</p>
+        <p class="parrafo">No hay mensajes para mostrar.</p>
     <?php endif; ?>
 
 </body>
