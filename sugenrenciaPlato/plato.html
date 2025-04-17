@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sugerencias de Platos</title>
+  <link rel="stylesheet" href="/sugenrenciaPlato/plato.css">
+</head>
+
+<body>
+  <header class="header">
+    <div>
+      <h1 class="header_h1">Sugerencias de platos por medio de los ingredientes</h1>
+    </div>
+    <div class="div_a">
+      <a class="header_a" href="/index.php">Inicio</a>
+    </div>
+  </header>
+
+
+  <div class="contenido">
+    <div>
+    <h1>Selecciona un plato</h1>
+  </div>
+    <select id="platosSelect"></select>
+
+    <h2>Platos relacionados por ingredientes: </h2>
+    <ul id="sugerencias"></ul>
+  <script>
+    // Obtener el grafo desde plato.php
+    fetch("plato.php")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Error al obtener los datos del grafo");
+        }
+        return response.json();
+      })
+      .then(grafo => {
+        console.log("Grafo recibido:", grafo); // Depuración: Verifica el grafo recibido
+        const select = document.getElementById("platosSelect");
+        const ul = document.getElementById("sugerencias");
+
+        // Llenar el select con los nombres de los platos
+        for (let plato in grafo) {
+          const option = document.createElement("option");
+          option.value = plato;
+          option.textContent = plato;
+          select.appendChild(option);
+        }
+
+        // Mostrar sugerencias al cambiar el plato seleccionado
+        select.addEventListener("change", () => {
+          ul.innerHTML = ""; // Limpiar la lista de sugerencias
+          const seleccion = select.value;
+          const relacionados = grafo[seleccion] || [];
+
+          if (relacionados.length === 0) {
+            const li = document.createElement("li");
+            li.textContent = "No hay platos relacionados.";
+            ul.appendChild(li);
+          } else {
+            relacionados.forEach(plato => {
+              const li = document.createElement("li");
+              li.textContent = plato;
+              ul.appendChild(li);
+            });
+          }
+        });
+
+        // Disparar el evento de cambio inicial para mostrar sugerencias del primer plato
+        if (Object.keys(grafo).length > 0) {
+          select.value = Object.keys(grafo)[0]; // Seleccionar el primer plato por defecto
+          select.dispatchEvent(new Event("change"));
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        const ul = document.getElementById("sugerencias");
+        ul.innerHTML = "<li>Error al cargar los datos. Intenta nuevamente más tarde.</li>";
+      });
+  </script>
+  </div>
+</body>
+
+</html>

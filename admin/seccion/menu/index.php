@@ -3,15 +3,19 @@ include("../../bd.php");
 if (isset($_GET["txtID"])) {
     $txtID = (isset($_GET["txtID"])) ? $_GET["txtID"] : "";
 
-    $sentencia = $conn->prepare("DELETE FROM menu WHERE id= :id");
+    $sentencia = $conn->prepare("DELETE FROM plato WHERE id= :id");
     $sentencia->bindParam(":id", $txtID);
     $sentencia->execute();
 }
 
-$sentencia = $conn->prepare("SELECT * FROM menu");
+$sentencia = $conn->prepare("SELECT * FROM plato");
 $sentencia->execute();
 $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 include("../../templates/header.php");
+
+
+$sentencia = $conn->prepare("SELECT ingrediente.nombre,  FROM ingrediente ");
+
 ?>
 
 <section class="container">
@@ -37,7 +41,22 @@ include("../../templates/header.php");
                             <tr class="">
                                 <td scope="row"><?php echo $value["id"]; ?></td>
                                 <td><?php echo $value["nombre"]; ?></td>
-                                <td><?php echo $value["ingredientes"]; ?></td>
+                                <td>
+                                    <?php
+                                    $sentenciaIngredientes = $conn->prepare("
+                                        SELECT ingrediente.nombre 
+                                        FROM ingrediente 
+                                        INNER JOIN plato_ingrediente 
+                                        ON ingrediente.id = plato_ingrediente.ingrediente_id 
+                                        WHERE plato_ingrediente.plato_id = :plato_id
+                                    ");
+                                    $sentenciaIngredientes->bindParam(":plato_id", $value["id"]);
+                                    $sentenciaIngredientes->execute();
+                                    $ingredientes = $sentenciaIngredientes->fetchAll(PDO::FETCH_COLUMN);
+
+                                    echo implode(", ", $ingredientes);
+                                    ?>
+                                </td>
                                 <td><?php echo $value["precio"]; ?></td>
                                 <td><img src="<?php echo $value["foto"]; ?>" alt="Foto" width="50"></td>
                                 <td>

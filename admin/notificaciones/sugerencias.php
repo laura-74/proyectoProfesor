@@ -12,23 +12,34 @@ if (file_exists($archivoMensajes)) {
 }
 
 // Procesar los datos enviados por el formulario
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["nombre"], $_POST["email"], $_POST["telefono"], $_POST["mensaje"])) {
-    $nuevoMensaje = [
-        "nombre" => $_POST["nombre"],
-        "email" => $_POST["email"],
-        "telefono" => $_POST["telefono"],
-        "mensaje" => $_POST["mensaje"],
-        "fecha" => date("Y-m-d H:i:s")
-    ];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["nombre"], $_POST["email"], $_POST["telefono"], $_POST["mensaje"])) {
+        $nuevoMensaje = [
+            "nombre" => $_POST["nombre"],
+            "email" => $_POST["email"],
+            "telefono" => $_POST["telefono"],
+            "mensaje" => $_POST["mensaje"],
+            "fecha" => date("Y-m-d H:i:s")
+        ];
 
-    // Agregar el nuevo mensaje al arreglo de mensajes
-    $mensajesGuardados[] = $nuevoMensaje;
+        // Agregar el nuevo mensaje al arreglo de mensajes
+        $mensajesGuardados[] = $nuevoMensaje;
 
-    // Guardar los mensajes en el archivo
-    file_put_contents($archivoMensajes, json_encode($mensajesGuardados, JSON_PRETTY_PRINT));
+        // Guardar los mensajes en el archivo
+        file_put_contents($archivoMensajes, json_encode($mensajesGuardados, JSON_PRETTY_PRINT));
 
-    header("Location: /index.php");
-    exit;
+        header("Location: /index.php");
+        exit;
+    } elseif (isset($_POST["borrarUltimo"])) {
+        // Eliminar el último mensaje
+        array_pop($mensajesGuardados);
+
+        // Guardar los mensajes actualizados en el archivo
+        file_put_contents($archivoMensajes, json_encode($mensajesGuardados, JSON_PRETTY_PRINT));
+
+        header("Location: /admin/notificaciones/sugerencias.php");
+        exit;
+    }
 }
 
 // Mostrar los mensajes guardados
@@ -44,14 +55,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["nombre"], $_POST["emai
 </head>
 
 <body>
-    <header class="header">
-        <div class="headerDiv">
-            <h1 class="header_h1">Sugerencias del cliente</h1>
+<header class="header">
             <div class="div_a">
                 <a class="header_a" href="/admin/seccion/index.php">Inicio</a>
             </div>
-        </div>
-    </header>   
+            <div>
+                <h1 class="header_h1">Buzon de sugerencias</h1>
+            </div>
+            <div>
+            <form method="POST" >
+            <button class="header_button" type="submit" name="borrarUltimo">Borrar último mensaje</button>
+        </form>
+            </div>
+    </header>
 
     <?php if (!empty($mensajesGuardados)): ?>
         <div class="contenido">

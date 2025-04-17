@@ -19,10 +19,10 @@ $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 $listaTestimonios = $resultado;
 
 
-$sentencia = $conn->prepare("SELECT * FROM menu limit 6");
+$sentencia = $conn->prepare("SELECT * FROM plato limit 2");
 $sentencia->execute();
 $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-$listaMenu = $resultado;
+$listaplato = $resultado;
 
 /*MATRIZ RESERVA DE MESAS */
 $mesas = [
@@ -110,6 +110,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <a class="nav-link" href="#reservas">Reservaciones</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="/sugenrenciaPlato/plato.html">Sugerencia de platos</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="#testimonios">Testimonios</a>
                 </li>
 
@@ -170,20 +173,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </section>
 
-    <section id="platos">
-        <h2 class="text-center">Recomendaciones</h2>
+    <section id="platos" >
+        <h2 class="text-center">Mejores platos</h2>
         <br>
 
-
         <div class="col d-flex p-5" style="justify-content: space-around; width: 100%; display: flex;">
-
-            <?php foreach ($listaMenu as $menu) { ?>
+            <?php foreach ($listaplato as $plato) { ?>
                 <div class="card h-100">
-                    <img src="<?php echo $menu['foto']; ?>" alt="Bandeja paisa">
+                    <img src="<?php echo $plato['foto']; ?>" alt="Bandeja paisa">
                     <div class="card-body">
-                        <h5 class="card-title"><?php echo $menu['nombre']; ?></h5>
-                        <p class="card-text"><?php echo $menu['ingredientes']; ?></p>
-                        <p class="card-text"><?php echo $menu['precio']; ?></p>
+                        <h5 class="card-title"><?php echo $plato['nombre']; ?></h5>
+                        <p class="card-text"><?php echo $plato['ingredientes']; ?></p>
+                        <p class="card-text"><?php echo $plato['precio']; ?></p>
                     </div>
                 </div>
             <?php } ?>

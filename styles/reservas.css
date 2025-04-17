@@ -21,20 +21,13 @@ body {
 }
 /*header*/
 .header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 8rem;
-    position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 8rem;
+
 }
-.headerDiv {
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-}
+
 .div_a  a{
     font-size: 1.5rem;
     margin: 1rem;
@@ -47,16 +40,25 @@ body {
 }
 .header_h1 {
     font-size: 3rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+
 }
 .header_a a {
     font-size: 2.2rem;
     display: flex;
     justify-content: center;
     margin-top: 2rem;
+    
+}
+
+.header_button{
+  font-size: 1.5rem;
+  margin: 1rem;
+  padding: 1rem;
+  background: white;
+  color: black;
+  text-decoration: none;
+  border-radius: 0.4rem;
+  border : 0.1rem solid black;
 }
 /*main*/
 .main{

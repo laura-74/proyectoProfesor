@@ -41,12 +41,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["nombre"], $_POST["mesa
 
 <body>
     <header class="header">
-        <div class="headerDiv">
-            <h1 class="header_h1">Reservas pendientes</h1>
             <div class="div_a">
                 <a class="header_a" href="/admin/seccion/index.php">Inicio</a>
             </div>
-        </div>
+            <div>
+                <h1 class="header_h1">Reservas pendientes</h1>
+            </div>
+            <div>
+                <form method="post" action="">
+                    <button type="submit" name="borrar_primero" class="header_button">Atender reserva</button>
+                </form>
+            </div>
     </header>
     <?php if (!empty($reservasGuardadas)): ?>
         <div class="contenido">
@@ -64,3 +69,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["nombre"], $_POST["mesa
 </body>
 
 </html>
+
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["borrar_primero"])) {
+    if (!empty($reservasGuardadas)) {
+        // Eliminar la primera reserva
+        array_shift($reservasGuardadas);
+
+        // Guardar las reservas actualizadas en el archivo
+        file_put_contents($archivoReservas, json_encode($reservasGuardadas, JSON_PRETTY_PRINT));
+
+        // Recargar la página para reflejar los cambios
+        header("Location: /admin/notificaciones/reservas.php");
+        exit;
+    }
+}
+?>
