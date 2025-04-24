@@ -1,8 +1,8 @@
-CREATE DATABASE restaurante;
+CREATE DATABASE IF NOT EXISTS restaurante;
 USE restaurante;
 
 CREATE TABLE banner (
-id INT PRIMARY KEY AUTO_INCREMENT,
+id INT AUTO_INCREMENT PRIMARY KEY,
 titulo VARCHAR(255) NOT NULL,
 descripcion VARCHAR(255) NOT NULL,
 link VARCHAR(255) NOT NULL
@@ -25,16 +25,23 @@ correo VARCHAR(255) NOT NULL,
 mensaje VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE plato (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(255) NOT NULL,
-    precio VARCHAR(255) NOT NULL,
-    foto VARCHAR(255) NOT NULL
+CREATE TABLE menu (
+id INT PRIMARY KEY AUTO_INCREMENT,
+nombre VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE ingrediente (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE plato (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    precio VARCHAR(255) NOT NULL,
+    foto VARCHAR(255) NOT NULL,
+    menu_id INT NOT NULL,
+    FOREIGN KEY (menu_id) REFERENCES menu(id) ON DELETE CASCADE
 );
 
 CREATE TABLE plato_ingrediente (
@@ -94,5 +101,18 @@ INSERT INTO ingrediente (nombre) VALUES ('Plátano verde');
 INSERT INTO ingrediente (nombre) VALUES ('Raices chinas');
 INSERT INTO ingrediente (nombre) VALUES ('Guascas');
 INSERT INTO ingrediente (nombre) VALUES ('Raices chinas');
-INSERT INTO ingrediente (nombre) VALUES ('Chicharron');
+INSERT INTO ingrediente (nombre) VALUES ('Guascas');
 
+
+INSERT INTO menu (nombre) VALUES ('Entradas');
+INSERT INTO menu (nombre) VALUES ('Platos fuertes');
+INSERT INTO menu (nombre) VALUES ('Postres');
+INSERT INTO menu (nombre) VALUES ('Bebidas');
+
+
+INSERT INTO plato (nombre,precio,foto,menu_id) VALUES ('Ajiaco', '15000', 'ajiaco.jpg', 2);
+INSERT INTO plato (nombre,precio,foto,menu_id) VALUES ('Bandeja paisa', '20000', 'bandeja_paisa.jpg', 2);      
+INSERT INTO plato (nombre,precio,foto,menu_id) VALUES ('Sancocho', '18000', 'sancocho.jpg', 2);
+INSERT INTO plato (nombre,precio,foto,menu_id) VALUES ('Empanada', '2500', 'bandeja_mariscos.jpg', 1);
+INSERT INTO plato (nombre,precio,foto,menu_id) VALUES ('Arepa', '3000', 'arepa.jpg', 1);
+INSERT INTO plato (nombre,precio,foto,menu_id) VALUES ('Torta de chocolate', '8000', 'torta_chocolate.jpg', 3);    
