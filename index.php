@@ -1,17 +1,11 @@
 <?php
 include("admin/bd.php");
 include("pilaMensaje.php"); // Importar la clase PilaMensajes
+include 'recursivoTestimonio.php';
 $sentencia = $conn->prepare("SELECT * FROM banner limit 1");
 $sentencia->execute();
 $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 $listaBanner = $resultado;
-
-
-$sentencia = $conn->prepare("SELECT * FROM colaboradores limit 3");
-$sentencia->execute();
-$resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-$listaColaboradores = $resultado;
-
 
 $sentencia = $conn->prepare("SELECT * FROM testimonios limit 6");
 $sentencia->execute();
@@ -73,6 +67,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 
+/*RECURSIVO TESTIMONIOS*/
+$testimonios = obtenerTestimonios($conn);
+
+/*iterarivos*/
+$stmt = $conn->query("SELECT * FROM colaboradores");
+$chefs = $stmt->fetchAll(PDO::FETCH_ASSOC); 
 ?>
 
 
@@ -119,10 +119,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <li class="nav-item">
                     <a class="nav-link" href="#contacto">Contacto</a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="/arbolMenu.php">Menú completo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/presupuesto.php">Presupuesto</a>
+                </li>               
+                <li class="nav-item">
+                    <a class="nav-link" href="/binario.php">Buscar 🔎</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/authentication/login.php">Iniciar Sesión</a>
                 </li>
+
+
 
             </ul>
         </div>
@@ -154,26 +164,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </section>
 
     <section id="chefs" class="py-5">
-        <div class="container">
-            <h2 class="text-center mb-4">Nuestros Chefs</h2>
-            <div class="row d-flex justify-content-center">
-
-                <?php foreach ($listaColaboradores as $colaborador) { ?>
-                    <div class="col-md-4 d-flex">
-                        <div class="card mb-4 w-100">
-                            <img src="<?php echo $colaborador['foto']; ?>" class="card-img-top" alt="Chef 1">
-                            <div class="card-body">
-                                <h5 class="card-title"><?php echo $colaborador['nombre']; ?></h5>
-                                <p class="card-text"><?php echo $colaborador['descripcion']; ?></p>
-                            </div>
+        <h2 class="text-center">Nuestros Chefs</h2>
+        <div class="d-flex flex-wrap justify-content-center">
+            <?php foreach ($chefs as $chef): ?>
+                <div class="card m-3" style="width: 18rem;">
+                    <img src="<?= htmlspecialchars($chef['foto']) ?>" class="card-img-top" alt="<?= htmlspecialchars($chef['nombre']) ?>">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><?= htmlspecialchars($chef['nombre']) ?></h5>
+                        <p class="card-text"><?= htmlspecialchars($chef['descripcion']) ?></p>
+                        <div class="d-flex justify-content-around">
+                            <a href="<?= htmlspecialchars($chef['facebook']) ?>" target="_blank" class="btn btn-primary btn-sm">Facebook</a>
+                            <a href="<?= htmlspecialchars($chef['instagram']) ?>" target="_blank" class="btn btn-danger btn-sm">Instagram</a>
+                            <a href="<?= htmlspecialchars($chef['youtube']) ?>" target="_blank" class="btn btn-dark btn-sm">YouTube</a>
                         </div>
                     </div>
-                <?php } ?>
-            </div>
+                </div>
+            <?php endforeach; ?>
         </div>
     </section>
 
-    <section id="platos" >
+    <section id="platos">
         <h2 class="text-center">Mejores platos</h2>
         <br>
 
@@ -183,7 +193,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <img src="<?php echo $plato['foto']; ?>" alt="Bandeja paisa">
                     <div class="card-body">
                         <h5 class="card-title"><?php echo $plato['nombre']; ?></h5>
-                        <p class="card-text"><?php echo $plato['ingredientes']; ?></p>
                         <p class="card-text"><?php echo $plato['precio']; ?></p>
                     </div>
                 </div>
@@ -191,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </section>
 
-    <section id ="reservas">
+    <section id="reservas">
         <style>
             .reserva {
                 display: flex;
@@ -355,31 +364,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             </script>
 
-
     </section>
 
-    <section id="testimonios" class="bg-light py-5">
-        <div class="container">
-            <h2 class="text-center mb-4">Testimonios</h2>
-            <div class="row">
-                <?php foreach ($listaTestimonios as $testimonio) { ?>
-                    <div class="col-md-6 d-flex">
-                        <div class="card mb-4 w-100">
-
-
-                            <div class="card-body">
-                                <p class="card-text"><?php echo $testimonio['opinion']; ?></p>
-                            </div>
-
-                            <div class="card-footer text-muted">
-                                <p class="card-text"><?php echo $testimonio['nombre']; ?></p>
-                            </div>
-
-                        </div>
-                    </div>
-                <?php } ?>
-            </div>
-        </div>
+    <section id="testimonios">
+        <h2>Testimonios de Clientes</h2>
+        <?php mostrarTestimonios($testimonios); ?>
     </section>
 
     <section id="contacto" class="container mt-4"> <br>

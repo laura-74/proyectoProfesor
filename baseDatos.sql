@@ -54,10 +54,14 @@ CREATE TABLE plato_ingrediente (
 
 
 CREATE TABLE testimonios (
-id INT PRIMARY KEY AUTO_INCREMENT,
-opinion VARCHAR(255) NOT NULL,
-nombre VARCHAR(255) NOT NULL
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    mensaje TEXT NOT NULL,
+    padre_id INT DEFAULT NULL,
+    fecha DATETIME NOT NULL,
+    FOREIGN KEY (padre_id) REFERENCES testimonios(id)
 );
+
 
 CREATE TABLE usuario (
 id INT PRIMARY KEY AUTO_INCREMENT,
@@ -102,7 +106,14 @@ INSERT INTO ingrediente (nombre) VALUES ('Raices chinas');
 INSERT INTO ingrediente (nombre) VALUES ('Guascas');
 INSERT INTO ingrediente (nombre) VALUES ('Raices chinas');
 INSERT INTO ingrediente (nombre) VALUES ('Guascas');
-
+INSERT INTO ingrediente (nombre) VALUES ('Fresa');
+INSERT INTO ingrediente (nombre) VALUES ('Mora');
+INSERT INTO ingrediente (nombre) VALUES ('Piña');
+INSERT INTO ingrediente (nombre) VALUES ('Mango');
+INSERT INTO ingrediente (nombre) VALUES ('Leche condensada');
+INSERT INTO ingrediente (nombre) VALUES ('Galleta');    
+INSERT INTO ingrediente (nombre) VALUES ('Azucar');
+INSERT INTO ingrediente (nombre) VALUES ('Leche Entera');
 
 INSERT INTO menu (nombre) VALUES ('Entradas');
 INSERT INTO menu (nombre) VALUES ('Platos fuertes');

@@ -7,6 +7,7 @@ $ingredientesSeleccionados = [];
 $txtID = isset($_GET["txtID"]) ? $_GET["txtID"] : "";
 
 if ($txtID) {
+    
     // Obtener los datos del plato
     $sentencia = $conn->prepare("SELECT * FROM plato WHERE id = :id");
     $sentencia->bindParam(":id", $txtID);

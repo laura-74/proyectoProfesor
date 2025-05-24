@@ -1,51 +1,55 @@
 <?php
-include("../../bd.php");
-if (isset($_GET["txtID"])) {
-    $txtID = (isset($_GET["txtID"])) ? $_GET["txtID"] : "";
+include("../../../admin/bd.php");
+include("../../../recursivoTestimonio.php");
 
-    $sentencia = $conn->prepare("DELETE FROM testimonios WHERE id= :id");
-    $sentencia->bindParam(":id", $txtID);
-    $sentencia->execute();
+// Procesar el formulario de envío de testimonios
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nombre = $_POST['nombre'];
+    $mensaje = $_POST['mensaje'];
+    $padre_id = $_POST['padre_id'] ?? null;
+
+    // Validar que el padre_id sea válido o NULL
+    if (!empty($padre_id)) {
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM testimonios WHERE id = ?");
+        $stmt->execute([$padre_id]);
+        $exists = $stmt->fetchColumn();
+
+        if (!$exists) {
+            $padre_id = null; // Si el padre_id no existe, lo establecemos como NULL
+        }
+    } else {
+        $padre_id = null; // Si no se selecciona un padre_id, lo establecemos como NULL
+    }
+
+    // Insertar el testimonio en la base de datos
+    $stmt = $conn->prepare("INSERT INTO testimonios (nombre, mensaje, padre_id, fecha) VALUES (?, ?, ?, NOW())");
+    $stmt->execute([$nombre, $mensaje, $padre_id]);
+
+    header("Location: index.php");
+    exit;
 }
 
-$sentencia = $conn->prepare("SELECT * FROM testimonios");
-$sentencia->execute();
-$resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-include("../../templates/header.php");
+// Obtener todos los testimonios
+$testimonios = obtenerTestimonios($conn);
 ?>
 
-<section class="container">
-    <div class="card">
-        <div class="card-header">
-            <a name="" id="" class="btn btn-primary" href="crear.php" role="button">Agregar registro</a>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive-sm">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Opinión</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($resultado as $key => $value) { ?>
-                            <tr class="">
-                                <td scope="row"><?php echo $value["id"]; ?></td>
-                                <td><?php echo $value["nombre"]; ?></td>
-                                <td><?php echo $value["opinion"]; ?></td>
-                                <td>
-                                    <a name="" id="" class="btn btn-info" href="editar.php?txtID=<?php echo $value['id']; ?>" role="button">Editar</a>
-                                    <a name="" id="" class="btn btn-danger" href="index.php?txtID=<?php echo $value['id']; ?>" role="button">Borrar</a>
-                                </td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="card-footer text-muted">Footer</div>
-    </div>
-</section>
+<h2>Administrar Testimonios</h2>
+
+<!-- Formulario para agregar un nuevo testimonio -->
+<form method="post">
+    <input type="text" name="nombre" placeholder="Nombre" required><br>
+    <textarea name="mensaje" placeholder="Mensaje" required></textarea><br>
+    <label>Responder a:</label>
+    <select name="padre_id">
+        <option value="">Ninguno</option>
+        <?php foreach ($testimonios as $t): ?>
+            <option value="<?= $t['id'] ?>"><?= htmlspecialchars($t['nombre']) ?>: <?= htmlspecialchars(substr($t['mensaje'], 0, 30)) ?>...</option>
+        <?php endforeach; ?>
+    </select><br>
+    <button type="submit">Enviar</button>
+</form>
+
+<h3>Historial de Testimonios</h3>
+
+<!-- Mostrar los testimonios de forma recursiva -->
+<?php mostrarTestimonios($testimonios); ?>

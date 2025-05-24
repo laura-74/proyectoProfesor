@@ -1,0 +1,93 @@
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Header styling */
+.header {
+    background-color: #007BFF;
+    padding: 10px;
+    text-align: center;
+}
+
+.header .header_a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.header .header_a:hover {
+    text-decoration: underline;
+}
+
+/* Form styling */
+form {
+    margin: 20px 0;
+}
+
+form input[type="number"] {
+    padding: 10px;
+    font-size: 16px;
+    width: 200px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+/* Plato card styling */
+.plato {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.plato img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 20px;
+    border-radius: 5px;
+}
+
+.plato div {
+    flex: 1;
+}
+
+.plato strong {
+    font-size: 18px;
+    color: #007BFF;
+}
+
+.plato p {
+    margin: 5px 0;
+}
+
+/* Total styling */
+p strong {
+    font-size: 18px;
+    color: #333;
+}

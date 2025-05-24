@@ -75,7 +75,13 @@ include("admin/bd.php");
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans">
+<header class="header">
+    <div class="div_a">
+    <a class="header_a text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded" href="/index.php">Volver a la pagina principal</a>
+    </div>
+  </header>
     <div class="container mx-auto p-6">
+        
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Menú Desplegable</h1>
         <div class="bg-white shadow-md rounded-lg p-4">
             <?php echo renderMenu($menu); ?>

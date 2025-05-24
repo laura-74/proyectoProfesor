@@ -1,15 +1,5 @@
 [
     {
-        "nombre": "1.Mario",
-        "mesa": "Mesa 1",
-        "fecha": "2025-04-16T14:22"
-    },
-    {
-        "nombre": "2. Zayn",
-        "mesa": "Mesa 5",
-        "fecha": "2025-04-22T14:22"
-    },
-    {
         "nombre": "Liam",
         "mesa": "Mesa 5",
         "fecha": "2025-04-16T13:18"
@@ -28,5 +18,15 @@
         "nombre": "tercero",
         "mesa": "Mesa 4",
         "fecha": "2025-04-29T16:31"
+    },
+    {
+        "nombre": "Mickey",
+        "mesa": "Mesa 6",
+        "fecha": "2025-04-10T12:31"
+    },
+    {
+        "nombre": "Joel",
+        "mesa": "Mesa 1",
+        "fecha": "2025-05-10T14:47"
     }
 ]

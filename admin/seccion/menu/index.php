@@ -1,21 +1,35 @@
 <?php
 include("../../bd.php");
+
+// Eliminar un plato si se proporciona un ID
 if (isset($_GET["txtID"])) {
     $txtID = (isset($_GET["txtID"])) ? $_GET["txtID"] : "";
 
-    $sentencia = $conn->prepare("DELETE FROM plato WHERE id= :id");
-    $sentencia->bindParam(":id", $txtID);
-    $sentencia->execute();
+    // Verificar si el plato existe antes de eliminar
+    $sentenciaVerificar = $conn->prepare("SELECT COUNT(*) FROM plato WHERE id = :id");
+    $sentenciaVerificar->bindParam(":id", $txtID);
+    $sentenciaVerificar->execute();
+    $existePlato = $sentenciaVerificar->fetchColumn();
+
+    if ($existePlato) {
+        // Eliminar los ingredientes asociados al plato
+        $sentenciaIngredientes = $conn->prepare("DELETE FROM plato_ingrediente WHERE plato_id = :plato_id");
+        $sentenciaIngredientes->bindParam(":plato_id", $txtID);
+        $sentenciaIngredientes->execute();
+
+        // Eliminar el plato
+        $sentencia = $conn->prepare("DELETE FROM plato WHERE id= :id");
+        $sentencia->bindParam(":id", $txtID);
+        $sentencia->execute();
+    }
 }
 
+// Obtener todos los platos
 $sentencia = $conn->prepare("SELECT * FROM plato");
 $sentencia->execute();
 $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
 include("../../templates/header.php");
-
-
-$sentencia = $conn->prepare("SELECT ingrediente.nombre,  FROM ingrediente ");
-
 ?>
 
 <section class="container">
@@ -43,6 +57,7 @@ $sentencia = $conn->prepare("SELECT ingrediente.nombre,  FROM ingrediente ");
                                 <td><?php echo $value["nombre"]; ?></td>
                                 <td>
                                     <?php
+                                    // Obtener los ingredientes asociados al plato
                                     $sentenciaIngredientes = $conn->prepare("
                                         SELECT ingrediente.nombre 
                                         FROM ingrediente 

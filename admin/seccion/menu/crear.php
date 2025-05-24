@@ -6,13 +6,27 @@ if ($_POST) {
     $nombre = (isset($_POST["nombre"])) ? $_POST["nombre"] : "";
     $precio = (isset($_POST["precio"])) ? $_POST["precio"] : "";
     $foto = (isset($_POST["foto"])) ? $_POST["foto"] : "";
+    $menu_id = (isset($_POST["menu_id"])) ? $_POST["menu_id"] : null;
     $ingredientesSeleccionados = (isset($_POST["ingredientesSeleccionados"])) ? $_POST["ingredientesSeleccionados"] : "";
 
+    // Validar que el menu_id exista en la tabla `menu`
+    if (!empty($menu_id)) {
+        $sentenciaVerificar = $conn->prepare("SELECT COUNT(*) FROM menu WHERE id = :menu_id");
+        $sentenciaVerificar->bindParam(":menu_id", $menu_id);
+        $sentenciaVerificar->execute();
+        $menuExiste = $sentenciaVerificar->fetchColumn();
+
+        if (!$menuExiste) {
+            $menu_id = null; // Si el menu_id no existe, lo establecemos como NULL
+        }
+    }
+
     // Insertar el plato en la tabla `plato`
-    $sentencia = $conn->prepare("INSERT INTO plato(nombre, precio, foto) VALUES (:nombre, :precio, :foto)");
+    $sentencia = $conn->prepare("INSERT INTO plato(nombre, precio, foto, menu_id) VALUES (:nombre, :precio, :foto, :menu_id)");
     $sentencia->bindParam(":nombre", $nombre);
     $sentencia->bindParam(":precio", $precio);
     $sentencia->bindParam(":foto", $foto);
+    $sentencia->bindParam(":menu_id", $menu_id);
     $sentencia->execute();
 
     // Obtener el ID del plato recién insertado
@@ -33,6 +47,11 @@ if ($_POST) {
     header("Location: /admin/seccion/menu/index.php");
     exit;
 }
+
+// Obtener los menús disponibles desde la base de datos
+$sentenciaMenu = $conn->prepare("SELECT id, nombre FROM menu");
+$sentenciaMenu->execute();
+$menus = $sentenciaMenu->fetchAll(PDO::FETCH_ASSOC);
 
 // Obtener los ingredientes disponibles desde la base de datos
 $sentencia = $conn->prepare("SELECT id, nombre FROM ingrediente");
@@ -56,6 +75,18 @@ $ingredientes = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                     id="nombre"
                     aria-describedby="helpId"
                     placeholder="Escriba el nombre del platillo" />
+            </div>
+
+            <div class="mb-3">
+                <label for="menu_id" class="form-label">Menú</label>
+                <select class="form-select" name="menu_id" id="menu_id">
+                    <option value="" selected>Seleccione un menú</option>
+                    <?php foreach ($menus as $menu): ?>
+                        <option value="<?= htmlspecialchars($menu['id']) ?>">
+                            <?= htmlspecialchars($menu['nombre']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
             </div>
 
             <div>
