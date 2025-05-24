@@ -1,34 +1,13 @@
 <?php
-// Lista ordenada para búsqueda binaria
-$lista = [
-    "Ajiaco 🍲",
-    "Arepa con huevo 🍳",
-    "Arepa de choclo 🌽",
-    "Arroz con leche 🍚🥛",
-    "Arroz con pollo 🍚🐔",
-    "Bandeja paisa 🍽️",
-    "Buñuelo ",
-    "Changua 🍲",
-    "empanada de carne 🥟🥩",
-    "empanada de pollo 🥟🐔",
-    "empanada de queso 🥟🧀",
-    "Galleta de chips de chocolate 🍪",
-    "Jugo natural de fresa 🍓",
-    "Jugo natural de guanabana 🍈",
-    "Jugo natural de maracuyá 🍈",
-    "Jugo natural de mora 🍇",
-    "Jugo natural de naranja 🍊",
-    "Jugo natural de piña 🍍",
-    "Malteada de chocolate 🍫",
-    "Malteada de fresa 🍓",
-    "Pandebono 🍞🧀",
-    "pastel de carne 🥩",
-    "pastel de pollo 🐔",
-    "Sancocho 🍲",
-    "Tamales 🍲",
-    "Torta de chocolate 🍫",
-    "Torta de vainilla 🎂"
-];
+include("admin/bd.php");
+// Lista ordenada para búsqueda binaria usando PDO
+try {
+    // Asume que $pdo es tu conexión PDO en bd.php
+    $stmt = $conn->query("SELECT nombre FROM plato ORDER BY nombre ASC");
+    $lista = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+} catch (PDOException $e) {
+    $lista = [];
+}
 
 
 

@@ -114,6 +114,11 @@ INSERT INTO ingrediente (nombre) VALUES ('Leche condensada');
 INSERT INTO ingrediente (nombre) VALUES ('Galleta');    
 INSERT INTO ingrediente (nombre) VALUES ('Azucar');
 INSERT INTO ingrediente (nombre) VALUES ('Leche Entera');
+INSERT INTO ingrediente (nombre) VALUES ('Vainilla');
+INSERT INTO ingrediente (nombre) VALUES ('Harina de trigo');
+INSERT INTO ingrediente (nombre) VALUES ('Harina de maiz'); 
+
+
 
 INSERT INTO menu (nombre) VALUES ('Entradas');
 INSERT INTO menu (nombre) VALUES ('Platos fuertes');
